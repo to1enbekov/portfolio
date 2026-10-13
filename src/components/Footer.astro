@@ -1,0 +1,52 @@
+---
+import Brand from './Brand.astro';
+import Icon from './Icon.astro';
+import { localPath, type Locale } from '../i18n/locales';
+import { t } from '../i18n/translations';
+import { whatsappUrl } from '../lib/submission';
+const { locale } = Astro.props as { locale: Locale };
+const c = t(locale);
+---
+
+<footer class="site-footer container">
+  <div class="footer-top">
+    <div>
+      <Brand locale={locale} />
+      <p>{c.footer.tagline}</p>
+    </div>
+    <nav aria-label={c.nav.label}>
+      <a href={`${localPath(locale)}#services`}>{c.nav.services}</a>
+      <a href={`${localPath(locale)}#projects`}>{c.nav.projects}</a>
+      <a href={`${localPath(locale)}#process`}>{c.nav.process}</a>
+      <a href={`${localPath(locale)}#contact`}>{c.nav.contact}</a>
+    </nav>
+    <div class="footer-social">
+      <a
+        href={whatsappUrl(c.contact.directMessage)}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        WhatsApp
+        <Icon name="ArrowUpRight" size={16} />
+      </a>
+      <a
+        href="https://github.com/to1enbekov"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        GitHub
+        <Icon name="ArrowUpRight" size={16} />
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>
+      © {new Date().getUTCFullYear()} {c.footer.rights}
+    </span>
+    <a href={localPath(locale, 'privacy/')}>{c.footer.privacy}</a>
+    <a href="#top">
+      {c.footer.top}
+      <Icon name="ArrowUpRight" size={14} />
+    </a>
+  </div>
+</footer>

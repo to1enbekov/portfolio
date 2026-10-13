@@ -1,0 +1,152 @@
+---
+import '@fontsource-variable/inter';
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url';
+import interCyrillic from '@fontsource-variable/inter/files/inter-cyrillic-wght-normal.woff2?url';
+import interCyrillicExtended from '@fontsource-variable/inter/files/inter-cyrillic-ext-wght-normal.woff2?url';
+import '../styles/tokens.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { t } from '../i18n/translations';
+import { assetPath, localPath, locales, type Locale } from '../i18n/locales';
+interface Props {
+  locale: Locale;
+  title?: string;
+  description?: string;
+  route?: string;
+  noindex?: boolean;
+}
+const {
+  locale,
+  title = t(Astro.props.locale).meta.title,
+  description = t(Astro.props.locale).meta.description,
+  route = '',
+  noindex = false,
+} = Astro.props;
+const site = Astro.site || new URL('https://to1enbekov.github.io');
+const canonical = new URL(localPath(locale, route), site);
+const image = new URL(assetPath('assets/brand/og.png'), site);
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${new URL(localPath('ru'), site)}#organization`,
+      name: 'NS Dev',
+      url: new URL(localPath('ru'), site).href,
+      logo: new URL(assetPath('assets/brand/icon-512.png'), site).href,
+      telephone: '+77773567132',
+      sameAs: ['https://github.com/to1enbekov'],
+    },
+    {
+      '@type': 'WebSite',
+      name: 'NS Dev',
+      url: new URL(localPath('ru'), site).href,
+      inLanguage: locales,
+      publisher: { '@id': `${new URL(localPath('ru'), site)}#organization` },
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <link
+      rel="preload"
+      href={interLatin}
+      as="font"
+      type="font/woff2"
+      crossorigin="anonymous"
+    />
+    {locale !== 'en' && (
+      <link
+        rel="preload"
+        href={interCyrillic}
+        as="font"
+        type="font/woff2"
+        crossorigin="anonymous"
+      />
+    )}
+    {locale === 'kk' && (
+      <link
+        rel="preload"
+        href={interCyrillicExtended}
+        as="font"
+        type="font/woff2"
+        crossorigin="anonymous"
+      />
+    )}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#FFFFFF" />
+    {noindex ? (
+      <meta name="robots" content="noindex, follow" />
+    ) : (
+      <>
+        <link rel="canonical" href={canonical} />
+        {locales.map((l) => (
+          <link
+            rel="alternate"
+            hreflang={l}
+            href={new URL(localPath(l, route), site)}
+          />
+        ))}
+        <link
+          rel="alternate"
+          hreflang="x-default"
+          href={new URL(localPath('ru', route), site)}
+        />
+      </>
+    )}
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href={assetPath('assets/brand/icon-32.png')}
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href={assetPath('assets/brand/icon-180.png')}
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="NS Dev" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="NS Dev — Web · Mobile · Automation · AI"
+    />
+    <meta
+      property="og:locale"
+      content={{ ru: 'ru_RU', kk: 'kk_KZ', en: 'en_US' }[locale]}
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={image} />
+    {!noindex && (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    )}
+  </head>
+  <body>
+    <a class="skip-link" href="#main">
+      {t(locale).nav.skip}
+    </a>
+    <Header locale={locale} route={route} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer locale={locale} />
+    <script>
+      import '../scripts/site';
+    </script>
+  </body>
+</html>

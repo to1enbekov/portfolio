@@ -1,0 +1,43 @@
+---
+import { services } from '../data/services';
+import type { Locale } from '../i18n/locales';
+import { t } from '../i18n/translations';
+import Icon from './Icon.astro';
+const { locale } = Astro.props as { locale: Locale };
+const c = t(locale);
+---
+
+<section
+  class="section container"
+  id="services"
+  aria-labelledby="services-title"
+>
+  <div class="section-heading">
+    <p class="eyebrow">{c.services.eyebrow}</p>
+    <div>
+      <h2 id="services-title">{c.services.title}</h2>
+      <p class="section-description">{c.services.description}</p>
+    </div>
+  </div>
+  <div class="services-grid">
+    {services.map((service, i) => (
+      <article class="service-card">
+        <div class="service-top">
+          <Icon name={service.icon} size={28} />
+          <span>0{i + 1}</span>
+        </div>
+        <h3>{service.copy[locale].title}</h3>
+        <p>{service.copy[locale].text}</p>
+        <ul>
+          {service.copy[locale].deliverables.map((item) => (
+            <li>{item}</li>
+          ))}
+        </ul>
+        <a class="text-link" href={`#contact`} data-service={service.id}>
+          {c.services.cta}
+          <Icon name="ArrowUpRight" size={18} />
+        </a>
+      </article>
+    ))}
+  </div>
+</section>

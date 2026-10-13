@@ -1,0 +1,117 @@
+---
+import { projects, type Category } from '../data/projects';
+import { localPath, type Locale } from '../i18n/locales';
+import { t } from '../i18n/translations';
+import ProjectVisual from './ProjectVisual.astro';
+import Icon from './Icon.astro';
+const { locale } = Astro.props as { locale: Locale };
+const c = t(locale);
+const categories: ('all' | Category)[] = [
+  'all',
+  'commerce',
+  'business',
+  'education',
+  'ai',
+];
+---
+
+<section class="work-section" id="projects" aria-labelledby="projects-title">
+  <div class="container section">
+    <div class="section-heading">
+      <p class="eyebrow">{c.work.eyebrow}</p>
+      <div>
+        <h2 id="projects-title">{c.work.title}</h2>
+        <p class="section-description">{c.work.description}</p>
+      </div>
+    </div>
+    <div class="work-toolbar">
+      <h3>
+        {c.work.all}
+        <span class="project-total">07</span>
+      </h3>
+      <div
+        class="filters"
+        role="group"
+        aria-label={c.work.filter}
+        data-project-filters
+        hidden
+      >
+        {categories.map((category) => (
+          <button
+            type="button"
+            data-filter={category}
+            aria-pressed={category === 'all'}
+          >
+            {c.categories[category]}
+          </button>
+        ))}
+      </div>
+    </div>
+    <p
+      class="sr-only"
+      role="status"
+      data-filter-status
+      data-count-label={c.work.count}
+    ></p>
+    <div class="projects-grid">
+      {projects.map((project, i) => (
+        <article
+          class:list={['project-card', { 'project-featured': i < 2 }]}
+          data-project-category={project.category}
+        >
+          <a
+            class="project-image-link"
+            href={localPath(locale, `projects/${project.slug}/`)}
+            aria-label={`${project.name} — ${c.work.case}`}
+          >
+            <ProjectVisual project={project} locale={locale} />
+            <span class="project-open">
+              <Icon name="ArrowUpRight" size={22} />
+            </span>
+          </a>
+          <div class="project-info">
+            <div class="project-category">
+              <span>{project.copy[locale].category}</span>
+              <span class="project-number">0{i + 1}</span>
+            </div>
+            <a
+              class="project-title"
+              href={localPath(locale, `projects/${project.slug}/`)}
+            >
+              <h3>{project.name}</h3>
+              <Icon name="ArrowUpRight" size={22} />
+            </a>
+            <p>{project.copy[locale].summary}</p>
+            {project.copy[locale].note && (
+              <p class="project-note">{project.copy[locale].note}</p>
+            )}
+            <div class="project-links">
+              {project.links.map((link) => (
+                <a href={link.url} target="_blank" rel="noopener noreferrer">
+                  {c.work[link.label]}
+                  <Icon name="ArrowUpRight" size={14} />
+                </a>
+              ))}
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+    <aside class="code-sample">
+      <div>
+        <p class="eyebrow">GitHub</p>
+        <h3>{c.work.sample}</h3>
+        <p>{c.work.sampleDescription}</p>
+      </div>
+      <a
+        class="icon-button"
+        href="https://github.com/to1enbekov/kitapkhana"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Kitapkhana — GitHub"
+      >
+        <Icon name="ArrowUpRight" size={24} />
+      </a>
+    </aside>
+  </div>
+</section>

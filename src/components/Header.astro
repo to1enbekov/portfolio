@@ -1,0 +1,107 @@
+---
+import Brand from './Brand.astro';
+import Icon from './Icon.astro';
+import {
+  localPath,
+  locales,
+  languageNames,
+  type Locale,
+} from '../i18n/locales';
+import { t } from '../i18n/translations';
+interface Props {
+  locale: Locale;
+  route?: string;
+}
+const { locale, route = '' } = Astro.props;
+const c = t(locale);
+const nav = [
+  ['services', c.nav.services],
+  ['projects', c.nav.projects],
+  ['process', c.nav.process],
+  ['contact', c.nav.contact],
+];
+---
+
+<header class="site-header" id="top">
+  <div class="header-inner container">
+    <Brand locale={locale} />
+    <nav class="desktop-nav" aria-label={c.nav.label}>
+      {nav.map(([id, label]) => (
+        <a href={`${localPath(locale)}#${id}`}>{label}</a>
+      ))}
+    </nav>
+    <div class="header-actions">
+      <nav class="language-switch" aria-label={c.nav.languages}>
+        {locales.map((l) => (
+          <a
+            href={localPath(l, route)}
+            lang={l}
+            hreflang={l}
+            aria-current={l === locale ? 'page' : undefined}
+            data-language
+          >
+            {languageNames[l]}
+          </a>
+        ))}
+      </nav>
+      <a
+        class="button button-small header-cta"
+        href={`${localPath(locale)}#contact`}
+      >
+        {c.nav.discuss}
+        <Icon name="ArrowUpRight" size={16} />
+      </a>
+      <button
+        class="menu-toggle icon-button"
+        aria-label={c.nav.open}
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        data-menu-open
+        hidden
+      >
+        <Icon name="Menu" size={24} />
+      </button>
+    </div>
+  </div>
+  <noscript>
+    <nav class="nojs-mobile" aria-label={c.nav.label}>
+      {nav.map(([id, label]) => (
+        <a href={`${localPath(locale)}#${id}`}>{label}</a>
+      ))}
+    </nav>
+  </noscript>
+  <dialog id="mobile-menu" class="mobile-menu" aria-label={c.nav.label}>
+    <div class="mobile-menu-head">
+      <Brand locale={locale} />
+      <button class="icon-button" data-menu-close aria-label={c.nav.close}>
+        <Icon name="X" size={24} />
+      </button>
+    </div>
+    <nav aria-label={c.nav.label}>
+      {nav.map(([id, label], i) => (
+        <a href={`${localPath(locale)}#${id}`}>
+          <span class="menu-index">0{i + 1}</span>
+          {label}
+          <Icon name="ArrowUpRight" size={24} />
+        </a>
+      ))}
+    </nav>
+    <a class="button" href={`${localPath(locale)}#contact`}>
+      {c.nav.discuss}
+      <Icon name="ArrowRight" />
+    </a>
+    <nav class="language-switch" aria-label={c.nav.languages}>
+      {locales.map((l) => (
+        <a
+          href={localPath(l, route)}
+          lang={l}
+          hreflang={l}
+          aria-current={l === locale ? 'page' : undefined}
+          data-language
+        >
+          {languageNames[l]}
+        </a>
+      ))}
+    </nav>
+  </dialog>
+</header>
