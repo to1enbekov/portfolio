@@ -1,0 +1,205 @@
+---
+import { services } from '../data/services';
+import { localPath, type Locale } from '../i18n/locales';
+import { t } from '../i18n/translations';
+import { PHONE, whatsappUrl } from '../lib/submission';
+import Icon from './Icon.astro';
+const { locale } = Astro.props as { locale: Locale };
+const c = t(locale);
+---
+
+<section class="contact-section" id="contact" aria-labelledby="contact-title">
+  <div class="container section contact-layout">
+    <div class="contact-copy">
+      <p class="eyebrow">{c.contact.eyebrow}</p>
+      <h2 class="line-breaks" id="contact-title">
+        {c.contact.title}
+      </h2>
+      <p class="contact-description">{c.contact.description}</p>
+      <a
+        class="button"
+        href={whatsappUrl(c.contact.directMessage)}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {c.contact.whatsapp}
+        <Icon name="ArrowUpRight" size={18} />
+      </a>
+      <div class="phone-contact">
+        <a href="tel:+77773567132">{PHONE}</a>
+        <button
+          class="copy-phone"
+          type="button"
+          data-copy-phone
+          data-copied={c.contact.copied}
+          data-copy-fallback={c.contact.copyFallback}
+          hidden
+        >
+          <Icon name="Copy" size={16} />
+          {c.contact.copy}
+        </button>
+        <p class="copy-status" role="status" data-copy-status></p>
+      </div>
+    </div>
+    <form
+      class="enquiry-form"
+      data-enquiry
+      data-locale={locale}
+      method="post"
+      novalidate
+    >
+      <h3>{c.contact.formTitle}</h3>
+      <p class="form-required">{c.contact.required}</p>
+      <p class="form-summary" data-form-summary role="alert" hidden></p>
+      <fieldset data-enquiry-fields disabled>
+        <legend class="sr-only">{c.contact.formTitle}</legend>
+        <div class="form-grid">
+          <div class="field">
+            <label for="enquiry-name">
+              {c.contact.name} <span aria-hidden="true">*</span>
+            </label>
+            <input
+              id="enquiry-name"
+              name="name"
+              autocomplete="name"
+              minlength="2"
+              maxlength="80"
+              required
+              placeholder={c.contact.namePlaceholder}
+              aria-describedby="error-name"
+            />
+            <p class="field-error" id="error-name" data-error="name"></p>
+          </div>
+          <div class="field">
+            <label for="enquiry-service">
+              {c.contact.service} <span aria-hidden="true">*</span>
+            </label>
+            <select
+              id="enquiry-service"
+              name="service"
+              required
+              aria-describedby="error-service"
+            >
+              <option value="">{c.contact.choose}</option>
+              {services.map((service) => (
+                <option value={service.id}>{service.copy[locale].title}</option>
+              ))}
+            </select>
+            <p class="field-error" id="error-service" data-error="service"></p>
+          </div>
+          <div class="field field-wide">
+            <label for="enquiry-project">
+              {c.contact.project} <span aria-hidden="true">*</span>
+            </label>
+            <textarea
+              id="enquiry-project"
+              name="project"
+              rows="4"
+              minlength="10"
+              maxlength="1500"
+              required
+              placeholder={c.contact.projectPlaceholder}
+              aria-describedby="project-hint error-project"
+            ></textarea>
+            <p class="field-hint" id="project-hint">
+              {c.contact.lengthHint}
+            </p>
+            <p class="field-error" id="error-project" data-error="project"></p>
+          </div>
+          <div class="field">
+            <label for="enquiry-budget">
+              {c.contact.budget} <span>({c.contact.optional})</span>
+            </label>
+            <input
+              id="enquiry-budget"
+              name="budget"
+              maxlength="120"
+              placeholder={c.contact.budgetPlaceholder}
+              aria-describedby="budget-hint error-budget"
+            />
+            <p class="field-hint" id="budget-hint">
+              {c.contact.budgetHint}
+            </p>
+            <p class="field-error" id="error-budget" data-error="budget"></p>
+          </div>
+          <div class="field">
+            <label for="enquiry-timing">
+              {c.contact.timing} <span>({c.contact.optional})</span>
+            </label>
+            <input
+              id="enquiry-timing"
+              name="timing"
+              maxlength="120"
+              placeholder={c.contact.timingPlaceholder}
+              aria-describedby="error-timing"
+            />
+            <p class="field-error" id="error-timing" data-error="timing"></p>
+          </div>
+          <div class="field field-wide">
+            <label for="enquiry-reply">
+              {c.contact.reply} <span>({c.contact.optional})</span>
+            </label>
+            <input
+              id="enquiry-reply"
+              name="reply"
+              autocomplete="off"
+              maxlength="120"
+              placeholder={c.contact.replyPlaceholder}
+              aria-describedby="error-reply"
+            />
+            <p class="field-error" id="error-reply" data-error="reply"></p>
+          </div>
+        </div>
+        <div class="consent-field">
+          <label>
+            <input
+              type="checkbox"
+              name="consent"
+              id="enquiry-consent"
+              required
+              aria-describedby="error-consent"
+            />
+            <span>
+              {c.contact.consent} <span aria-hidden="true">*</span>
+            </span>
+          </label>
+          <a href={localPath(locale, 'privacy/')}>
+            {c.contact.privacy}
+            <Icon name="ArrowUpRight" size={14} />
+          </a>
+          <p class="field-error" id="error-consent" data-error="consent"></p>
+        </div>
+        <button class="button form-submit" type="submit">
+          {c.contact.submit}
+          <Icon name="ArrowUpRight" size={18} />
+        </button>
+      </fieldset>
+      <noscript>
+        <p>{c.contact.nojs}</p>
+        <a
+          class="text-link"
+          href={whatsappUrl(c.contact.directMessage)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {c.contact.whatsapp}
+          <Icon name="ArrowUpRight" size={18} />
+        </a>
+      </noscript>
+      <p class="form-explanation">{c.contact.explanation}</p>
+      <div class="form-handoff" data-handoff role="status" hidden>
+        <p>{c.contact.prepared}</p>
+        <a
+          class="text-link"
+          data-handoff-link
+          href={whatsappUrl(c.contact.directMessage)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          {c.contact.reopen}
+          <Icon name="ArrowUpRight" size={18} />
+        </a>
+      </div>
+    </form>
+  </div>
+</section>

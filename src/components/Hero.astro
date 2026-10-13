@@ -1,0 +1,66 @@
+---
+import { assetPath, type Locale } from '../i18n/locales';
+import { t } from '../i18n/translations';
+import Icon from './Icon.astro';
+const { locale } = Astro.props as { locale: Locale };
+const c = t(locale);
+---
+
+<section class="hero container" aria-labelledby="hero-title">
+  <div class="hero-copy">
+    <p class="eyebrow">
+      <span class="status-dot"></span>
+      {c.hero.eyebrow}
+    </p>
+    <h1 id="hero-title">
+      <span>{c.hero.line1}</span>
+      <span>{c.hero.line2}</span>
+      <span class="muted">{c.hero.line3}</span>
+    </h1>
+    <p class="hero-description">{c.hero.description}</p>
+    <div class="actions">
+      <a class="button" href="#contact">
+        {c.nav.discuss}
+        <Icon name="ArrowUpRight" />
+      </a>
+      <a class="button button-secondary" href="#projects">
+        {c.hero.work}
+        <Icon name="ArrowDown" size={18} />
+      </a>
+    </div>
+    <p class="hero-note">{c.hero.note}</p>
+  </div>
+  <div class="hero-art" aria-hidden="true">
+    <div class="art-top">
+      <span>NS Dev</span>
+      <span>01 — 03</span>
+    </div>
+    <div class="art-mark">
+      <div class="art-orbit orbit-one"></div>
+      <div class="art-orbit orbit-two"></div>
+      <img
+        src={assetPath('assets/brand/ns-mark-white.png')}
+        width="264"
+        height="304"
+        alt=""
+        fetchpriority="high"
+      />
+    </div>
+    <div class="art-bottom">
+      <span>
+        {c.hero.visual}
+        <br />
+        <strong>{c.hero.visualEnd}</strong>
+      </span>
+      <Icon name="ArrowUpRight" size={32} />
+    </div>
+    <div class="art-caption">{c.hero.visualLabel}</div>
+  </div>
+</section>
+<div class="intro-strip container">
+  <span>{c.hero.disciplines}</span>
+  <a href="#services">
+    {c.hero.scroll}
+    <Icon name="ArrowDown" size={16} />
+  </a>
+</div>

@@ -1,0 +1,99 @@
+---
+import type { Project } from '../data/projects';
+import { assetPath, type Locale } from '../i18n/locales';
+import { t } from '../i18n/translations';
+import Icon from './Icon.astro';
+interface Props {
+  project: Project;
+  locale: Locale;
+  large?: boolean;
+  eager?: boolean;
+}
+const { project, locale, large = false, eager = false } = Astro.props;
+const c = t(locale);
+---
+
+<div
+  class:list={[
+    'project-visual',
+    `visual-${project.slug}`,
+    { 'visual-large': large },
+  ]}
+>
+  {project.image ? (
+    <div class="browser-frame">
+      <div class="browser-bar" aria-hidden="true">
+        <span class="browser-dots">
+          <i></i>
+          <i></i>
+          <i></i>
+        </span>
+        <span>
+          {new URL(project.links[0]?.url || 'https://example.com').hostname}
+        </span>
+        <Icon name="ArrowUpRight" size={12} />
+      </div>
+      <img
+        src={assetPath(`assets/projects/${project.image}.webp`)}
+        srcset={`${assetPath(`assets/projects/${project.image}-640.webp`)} 640w, ${assetPath(`assets/projects/${project.image}.webp`)} 1200w`}
+        sizes={
+          large
+            ? '(max-width: 767px) 92vw, 1120px'
+            : '(max-width: 767px) 88vw, 560px'
+        }
+        width="1200"
+        height="800"
+        alt={`${project.name} — ${c.work.screenshot}`}
+        loading={eager ? 'eager' : 'lazy'}
+        decoding="async"
+      />
+    </div>
+  ) : (
+    <div
+      class:list={['graphic-cover', `cover-${project.cover}`]}
+      aria-label={`${project.name} — ${c.work.cover}`}
+      role="img"
+    >
+      <span class="cover-label">
+        {project.cover === 'mountains' ? 'Alatau Bot' : 'Rizko.ai'}
+      </span>
+      {project.cover === 'mountains' ? (
+        <svg
+          class="mountain-art"
+          viewBox="0 0 600 280"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M-30 270 165 80 230 152 318 25 430 162 490 104 645 275"
+            stroke="currentColor"
+            stroke-width="1"
+          />
+          <path
+            d="m165 80 12 35 18-7 35 44m88-127-26 87 26-15 15 18 28-34M54 280l130-133 105 133m-24 0 134-138 139 138"
+            stroke="currentColor"
+            stroke-width="1"
+          />
+          <circle cx="474" cy="47" r="22" stroke="currentColor" />
+          <path d="M0 278h600" stroke="currentColor" />
+        </svg>
+      ) : (
+        <div class="data-art" aria-hidden="true">
+          {Array.from({ length: 11 }, (_, i) => (
+            <span
+              style={`--bar:${[26, 42, 32, 68, 51, 79, 64, 87, 76, 95, 100][i]}%;--i:${i}`}
+            ></span>
+          ))}
+          <div class="data-line"></div>
+        </div>
+      )}
+      <span class="cover-bottom">
+        {c.work.cover}
+        <Icon
+          name={project.cover === 'mountains' ? 'Bot' : 'Workflow'}
+          size={18}
+        />
+      </span>
+    </div>
+  )}
+</div>

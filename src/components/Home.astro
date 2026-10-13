@@ -1,0 +1,22 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from './Hero.astro';
+import Services from './Services.astro';
+import Projects from './Projects.astro';
+import WhyUs from './WhyUs.astro';
+import Process from './Process.astro';
+import FAQ from './FAQ.astro';
+import ContactForm from './ContactForm.astro';
+import type { Locale } from '../i18n/locales';
+const { locale } = Astro.props as { locale: Locale };
+---
+
+<BaseLayout locale={locale}>
+  <Hero locale={locale} />
+  <Services locale={locale} />
+  <Projects locale={locale} />
+  <WhyUs locale={locale} />
+  <Process locale={locale} />
+  <FAQ locale={locale} />
+  <ContactForm locale={locale} />
+</BaseLayout>

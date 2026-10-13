@@ -1,0 +1,25 @@
+---
+import type { Locale } from '../i18n/locales';
+import { t } from '../i18n/translations';
+import Icon from './Icon.astro';
+const { locale } = Astro.props as { locale: Locale };
+const c = t(locale);
+---
+
+<section class="section container faq-layout" aria-labelledby="faq-title">
+  <div>
+    <p class="eyebrow">{c.faq.eyebrow}</p>
+    <h2 id="faq-title">{c.faq.title}</h2>
+  </div>
+  <div class="faq-list">
+    {c.faq.items.map((item) => (
+      <details>
+        <summary>
+          {item.q}
+          <Icon name="Plus" size={20} />
+        </summary>
+        <p>{item.a}</p>
+      </details>
+    ))}
+  </div>
+</section>

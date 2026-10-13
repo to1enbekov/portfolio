@@ -1,0 +1,48 @@
+---
+import {
+  ArrowUpRight,
+  ArrowRight,
+  ArrowDown,
+  ArrowLeft,
+  Plus,
+  Menu,
+  X,
+  Globe,
+  Workflow,
+  Bot,
+  Smartphone,
+  Layers,
+  PenTool,
+  Copy,
+} from '@lucide/astro';
+interface Props {
+  name: string;
+  size?: number;
+  class?: string;
+}
+const { name, size = 20, class: className = '' } = Astro.props;
+const icons = {
+  ArrowUpRight,
+  ArrowRight,
+  ArrowDown,
+  ArrowLeft,
+  Plus,
+  Menu,
+  X,
+  Globe,
+  Workflow,
+  Bot,
+  Smartphone,
+  Layers,
+  PenTool,
+  Copy,
+};
+const Component = icons[name as keyof typeof icons] || ArrowRight;
+---
+
+<Component
+  size={size}
+  stroke-width={1.5}
+  aria-hidden="true"
+  class={className}
+/>

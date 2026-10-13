@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from './Icon.astro';
+import {
+  localPath,
+  locales,
+  languageNames,
+  type Locale,
+} from '../i18n/locales';
+import { t } from '../i18n/translations';
+const { locale } = Astro.props as { locale: Locale };
+const c = t(locale);
+---
+
+<BaseLayout
+  locale={locale}
+  title={c.notFound.meta}
+  description={c.notFound.text}
+  noindex
+>
+  <section class="container not-found">
+    <p class="eyebrow">404 / NS Dev</p>
+    <h1>{c.notFound.title}</h1>
+    <p>{c.notFound.text}</p>
+    <div class="actions">
+      <a class="button" href={localPath(locale)}>
+        {c.notFound.home}
+        <Icon name="ArrowRight" size={18} />
+      </a>
+      <a class="button button-secondary" href={`${localPath(locale)}#projects`}>
+        {c.hero.work}
+        <Icon name="ArrowUpRight" size={18} />
+      </a>
+    </div>
+    <nav class="language-switch" aria-label={c.nav.languages}>
+      {locales.map((l) => (
+        <a href={localPath(l)} lang={l}>
+          {languageNames[l]}
+        </a>
+      ))}
+    </nav>
+  </section>
+</BaseLayout>
