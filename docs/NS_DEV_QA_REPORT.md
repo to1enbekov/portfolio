@@ -3,6 +3,10 @@
 Дата: 13 октября 2026. Рабочая папка: `C:\Users\knt\Desktop\ns\portfolio`.
 Ветка: `feat/ns-dev-agency-redesign`. Базовый commit: `7ae56bf`.
 
+Реализация: `0c7169b8a4c1eb220399c3bb1c23de95406c9dcf`.
+Draft PR: https://github.com/to1enbekov/portfolio/pull/2.
+Удалённый SHA проверен и совпадает с локальным. Первоначальный CLI push отклонён из-за отсутствия OAuth workflow scope; подключённый GitHub-инструмент успешно создал feature-ref на том же объекте commit. Main остался на `7ae56bf0a592c816184465e68ecb23ea24b94217`, Pages — legacy/main/root.
+
 ## Что изучено
 
 Полностью прочитаны мастер-промпт, DESIGN.md и текст визуальной идентичности. Проверены все восемь исходных PNG, чистый знак и варианты на разных фонах. В папке не было репозитория; клонирован исходный to1enbekov/portfolio. Проверены Git/README/HTML, опубликованный сайт, GitHub Pages API и публичные страницы работ. Подробная фиксация контента — NS_DEV_CONTENT_AUDIT.md.
@@ -36,7 +40,7 @@
 | npm run test:e2e                          | PASS; 52/52, skipped 0, unexpected 0, flaky 0; exit 0                                     |
 | Lighthouse mobile / production preview    | PASS; все четыре категории ≥ 90 на всех трёх локалях                                      |
 | git diff --check / сохранность index.html | PASS                                                                                      |
-| GitHub CI                                 | До создания PR — NOT RUN                                                                  |
+| GitHub CI                                 | PASS на Linux, implementation commit 0c7169b; run 38325456050                             |
 | Merge / deployment / DNS                  | NOT RUN, по границе владельца                                                             |
 
 Unit-проверки: полнота словарей, контракт семи проектов и URL, base paths, обязательные/необязательные поля, согласие, граничные длины, кодирование HTML/Cyrillic/KK и невозможность handoff невалидной формы.
@@ -63,6 +67,7 @@ Responsive-матрица: RU/KK/EN × 320, 375, 768, 1024, 1440. Проверя
 - Добавлен валидный базовый href к handoff fallback; SEO больше не видит непроходимую ссылку.
 - Шрифты preload локально, измеренный CLS после изменения — 0.
 - Клиентский словарь отделён от всего контента. JS 49 421 → 19 770 байт; gzip 7 362 байта.
+- Казахское название журнала приведено к написанию на публичной обложке: «Исламтану зерттеулері».
 - Переустановка зависимостей и пересборка были ошибочно запущены рядом с браузерным прогоном и нарушили его завершение/выдачу файлов. Эти промежуточные результаты не используются как итоговый PASS. Финальные проверки выполняются после установки и сборки; Lighthouse отдельно от Playwright.
 
 ## Превью и артефакты
@@ -76,6 +81,9 @@ Responsive-матрица: RU/KK/EN × 320, 375, 768, 1024, 1440. Проверя
 - `artifacts/sources/capture-report.json` — HTTP/status/title исходных screenshots.
 - `artifacts/playwright-results.json` и `playwright-report/index.html` — машинный и визуальный отчёты тестов.
 - `artifacts/lighthouse/{ru,kk,en}.{html,json}` и `summary.json` — измерения.
+- `artifacts/ns-dev-static.zip` — готовая статическая сборка без legacy сайта и QA данных.
+
+GitHub CI: https://github.com/to1enbekov/portfolio/actions/runs/38325456050. Все steps завершены success, включая Playwright и сохранение двух artifacts: ns-dev-qa и ns-dev-static-build. Публикационных jobs в этом workflow нет.
 
 Результаты визуально просмотрены: hero на RU/KK desktop/mobile, главная со всеми секциями, реальные проектные картинки, длинный казахский кейс, исходные варианты знака, белый знак на графитовом фоне и OG. Локальные артефакты игнорируются Git; CI повторно сохраняет screenshots и отчёт в Actions artifacts.
 
